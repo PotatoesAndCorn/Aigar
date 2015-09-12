@@ -1,7 +1,7 @@
 // A 2D vector.
-function Vector2(x = 0, y = 0) {
-	this.x = x;
-	this.y = y;
+function Vector2(x, y) {
+	this.x = (x != null) ? x : 0;
+	this.y = (y != null) ? y : 0;
 }
 
 // Returns the sum of the vector with another vector.
