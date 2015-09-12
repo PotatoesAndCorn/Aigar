@@ -8,7 +8,7 @@ function BlobObject(size, position) {
 // Extends BlobObject.
 function CellObject(name, velocity, size, position) {
 	BlobObject.call(this, size, position);
-	
+
 	this.name = name;
 	this.velocity = velocity;
 }

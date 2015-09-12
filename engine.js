@@ -1,7 +1,10 @@
+var objectslib = require('./objects.js');
+var BlobObject = objectsLib.BlobObject;
+var CellObject = objectsLib.CellObject;
 
 function World(x = 1000, y = 1000) {
-    this.foods = new Array();
-    this.players = new Array();
+    this.foods = new Array(); //  array of BlobObjects
+    this.players = new Array(); //  array of CellObjects
     this.x_max = x / 2;
     this.x_min = -x / 2;
     this.y_max = y / 2;
@@ -16,7 +19,7 @@ function World(x = 1000, y = 1000) {
     };
 
     this.tick = function() {
-        
+        var collisionPairs = this.getCollisions();
     }
 }
 
