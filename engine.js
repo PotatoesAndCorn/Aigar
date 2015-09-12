@@ -2,6 +2,9 @@ var objectslib = require('./objects.js');
 
 var Vec2 = require('vec2');
 var Quadtree2 = require('quadtree2');
+var mathlib = require('./math.js');
+var Vector2 = mathlib.Vector2;
+
 
 var BlobObject = objectsLib.BlobObject;
 var CellObject = objectsLib.CellObject;
@@ -21,11 +24,24 @@ function World(x, y) {
     };
 
     this.updatePositions = function() {
+        for (var i = 0; i < this.players.length; ++i) {
+            var playerElt = this.players[i];
 
+            if (playerElt.velocity.lengthSquared() === 0) {
+                continue;
+            }
+
+            playerElt.position = playerElt.position.add(playerElt.velocity);
+        }
     };
 
     this.tick = function() {
+        this.updatePositions();
+
         var collisionPairs = this.getCollisions();
+        for (var i = 0; i < collisionPairs.length; ++i) {
+            var collisionElt = collisionPairs[i];
+        }
     }
 }
 
