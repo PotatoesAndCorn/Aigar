@@ -6,11 +6,12 @@ function BlobObject(size, position) {
 
 // A blob with a name and a velocity.
 // Extends BlobObject.
-function CellObject(name, velocity, size, position) {
+function CellObject(name, velocity, size, position, player) {
 	BlobObject.call(this, size, position);
 
 	this.name = name;
 	this.velocity = velocity;
+	this.player = player;
 }
 CellObject.prototype = Object.create(BlobObject.prototype);
 CellObject.prototype.constructor = BlobObject;
