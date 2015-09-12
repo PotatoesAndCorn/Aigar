@@ -21,7 +21,11 @@ function World(x = 1000, y = 1000) {
         for (var i = 0; i < this.players.length; ++i) {
             var playerElt = this.players[i];
 
-            playerElt.
+            if (playerElt.velocity.lengthSquared() === 0) {
+                continue;
+            }
+
+            playerElt.position = playerElt.position.add(playerElt.velocity);
         }
     };
 
@@ -29,6 +33,9 @@ function World(x = 1000, y = 1000) {
         this.updatePositions();
 
         var collisionPairs = this.getCollisions();
+        for (var i = 0; i < collisionPairs.length; ++i) {
+            var collisionElt = collisionPairs[i];
+        }
     }
 }
 
