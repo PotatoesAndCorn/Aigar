@@ -22,8 +22,13 @@
 				console.assert(vec.length() === 5, "Vector2.length() failed");
 				var n = vec.normalize();
 				console.assert(n.x === 3 / 5 && n.y === 4 / 5, "Vector2.normalize() failed");
-				var d = Vector2.dot(vec, new Vector2(2, 3));
-				console.assert(d === 18, "Vector2.dot() failed");
+				console.assert(vec.dot(new Vector2(2, 3)) === 18, "Vector2.dot() failed");
+				var a = vec.add(new Vector2(1, 2));
+				console.assert(a.x === 4 && a.y === 6, "Vector2.add() failed");
+				var d = vec.sub(new Vector2(1, 2));
+				console.assert(d.x === 2 && d.y === 2, "Vector2.sub() failed");
+				var s = vec.scale(10);
+				console.assert(s.x === 30 && s.y === 40, "Vector2.scale() failed");
 
 				console.log("Vector2 tests complete.");
 			}
