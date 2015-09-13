@@ -5,11 +5,15 @@ var Quadtree2 = require('quadtree2');
 var mathlib = require('./math.js');
 var Vector2 = mathlib.Vector2;
 
+var TickData = require('./tick.js').TickData;
 
 var BlobObject = objectslib.BlobObject;
 var CellObject = objectslib.CellObject;
+var PlayerCellObject = objectslib.PlayerCellObject;
 
-function World(x, y) {
+var network = require('./network.js');
+
+function World(x, y, port) {
     if(x == null){x = 1000;}
     if(y == null){y = 1000;}
     this.x = x;
@@ -20,6 +24,15 @@ function World(x, y) {
     this.x_min = -x / 2;
     this.y_max = y / 2;
     this.y_min = -y / 2;
+
+    this.server = new network.Server(port);
+    this.server.on("connection", function(client) {
+    	console.log("Client " + client.id + " connected with name \"" + client.info.name + "\"!");
+    });
+    this.server.on("disconnection", function(client) {
+    	console.log("Client \"" + client.info.name + "\" disconnected!");
+    });
+    this.server.start();
 }
 
 World.prototype.combine = function(cellA, cellB) {
@@ -36,6 +49,7 @@ World.prototype.eatCell = function(eater, eatee) {
                 this.players = this.players.splice(i, 1);
                 // notify eatee of eat
                 // notify eater of eat
+
                 break;
             }
         }
@@ -75,7 +89,8 @@ World.prototype.updatePositions = function() {
 
 World.prototype.tick = function() {
     this.updatePositions();
-    var collisionPairs = getCollisions();
+    var collision = getCollisions();
+    var collisionPairs = collision[0];
 
     for (var i = 0; i < collisionPairs.length; ++i) {
         var collisionElt = collisionPairs[i];

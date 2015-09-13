@@ -5,3 +5,5 @@ function TickData(source) {
 	this.ate = null;      // If not null, then the player ate this cell.
 	this.eatenBy = null;  // If not null, then the player was eaten by this cell.
 }
+
+module.exports.TickData = TickData;
