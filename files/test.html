@@ -12,6 +12,7 @@
 		<script src="objects.js" type="text/javascript"></script>
 		<script src="tick.js" type="text/javascript"></script>
 		<script src="binary.js"></script>
+		<script src="network.js" type="text/javascript"></script>
 
 		<script type="text/javascript">
 			function vector2Tests() {
@@ -63,15 +64,16 @@
 			vector2Tests();
 			objectTests();
 
-			var client = new BinaryClient("ws://localhost:9845");
-			client.on("open", function() {
-				client.send({ name: "Foo" }, { type: 1 });
-			});
+			window.client = new Client();
+			client.addConnectedListener(function() { alert("Connected!"); });
+			client.addDisconnectedListener(function() { alert("Disconnected!"); });
+			client.connect("ws://localhost:9845/", { name: "Foobar" });
 		</script>
 	</head>
 	<body>
 		<div>
 			Bacon ipsum dolor amet sausage sunt enim cupim occaecat porchetta. Landjaeger salami chuck, non proident cupidatat dolor cillum kevin in short loin consectetur anim velit filet mignon. Chicken landjaeger boudin dolore. Sausage strip steak pork chop, esse ground round kielbasa in pork belly ex cillum minim. Boudin sirloin flank short loin prosciutto id. Leberkas short ribs pork belly tenderloin sirloin.
 		</div>
+		<input type="button" value="Disconnect" onClick="client.disconnect();">
 	</body>
 </html>

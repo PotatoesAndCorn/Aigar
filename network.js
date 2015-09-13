@@ -8,6 +8,9 @@ var BinaryServer = require("binaryjs").BinaryServer;
 // - name = The client's display name
 var PACKET_TYPE_CLIENT_INFO = 1;
 
+// Empty packet which confirms that a client has finished connecting.
+var PACKET_TYPE_CLIENT_CONNECTED = 2;
+
 // Associates a client ID with an information blob.
 function ConnectedClient(id, binClient, info) {
 	this.id = id;
@@ -79,7 +82,6 @@ Server.prototype._disconnectClient = function(clientId) {
 
 	var client = this.findClient(clientId);
 	if (!client) {
-		console.error("Client " + clientId + " is already disconnected!");
 		return;
 	}
 
@@ -103,7 +105,7 @@ Server.prototype._packetReceived = function(clientId, binClient, data, meta) {
 			this._clientInfoPacketReceived(clientId, binClient, data);
 			break;
 		default:
-			console.warn("Discarding packet of unrecognized type " + meta.type);
+			console.warn("Discarding packet of unsupported type " + meta.type);
 			break;
 	}
 }
@@ -124,6 +126,9 @@ Server.prototype._clientInfoPacketReceived = function(clientId, binClient, data)
 
 	// Signal a "connection" event
 	this.emit("connection", client);
+
+	// Notify the client that they've finished connecting
+	client.send(PACKET_TYPE_CLIENT_CONNECTED, {});
 }
 
 module.exports = {
