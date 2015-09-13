@@ -114,6 +114,16 @@ function getCollisionsFromQuad(x, y, foods, players)
                 obj: entity
             }));
     }
+    for(var i=0; i<players.length; i++)
+    {
+        var entity = players[i];
+        itemstoadd.push(quadtree.addObject(
+            {
+                pos: new Vec2(entity.position.x, entity.position.y),
+                rad: Math.sqrt(entity.size),
+                obj: entity
+            }));
+    }
 
     var pairs = new Array();
     for(var i=0; i<itemstoadd.length; ++i)
