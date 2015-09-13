@@ -55,6 +55,11 @@ World.prototype.eatCell = function(eater, eatee) {
 World.prototype.getCollisions = function() {
     return getCollisionsFromQuad(this.x, this.y, this.food, this.players);
 }
+World.prototype.filterBlobInRadius = function()
+{
+
+}
+
 
 World.prototype.updatePositions = function() {
     for (var i = 0; i < this.players.length; ++i) {
@@ -111,7 +116,8 @@ function getCollisionsFromQuad(x, y, foods, players)
             {
                 pos: new Vec2(entity.position.x, entity.position.y),
                 rad: Math.sqrt(entity.size),
-                obj: entity
+                obj: entity,
+                view: false
             }));
     }
     for(var i=0; i<players.length; i++)
@@ -121,7 +127,8 @@ function getCollisionsFromQuad(x, y, foods, players)
             {
                 pos: new Vec2(entity.position.x, entity.position.y),
                 rad: Math.sqrt(entity.size),
-                obj: entity
+                obj: entity,
+                view: false
             }));
     }
 
@@ -142,7 +149,41 @@ function getCollisionsFromQuad(x, y, foods, players)
             continue;
 
     }
-    return pairs;
+
+    outer = []
+    for(var i=0; i<players.length; i++)
+    {
+        var entity = players[i];
+        var obj = quadtree.addObject(
+            {
+                pos: new Vec2(entity.position.x, entity.position.y),
+                rad: (entity.size * entity.size * 10),
+                obj: entity,
+                view: true
+            });
+        itemstoadd.push(obj);
+        outer.push(obj);
+    }
+    var views = new Array();
+    for(var i=0; i<outer.length; ++i)
+    {
+        var item = outer[i];
+        var coll = quadtree.getCollidings(item);
+        var kez = Object.keys(coll);
+        if(kez.length !== 0 && kez != null)
+        {
+            for(var j=0; j<kez.length; j++)
+            {
+                if(!coll[kez[j]]["view"])
+                {
+                    views.push({a:item["obj"], b:coll[kez[j]]["obj"]});
+                }
+            }
+        }
+        else
+            continue;
+    }
+    return [pairs, views];
 }
 
 module.exports.World = World;
