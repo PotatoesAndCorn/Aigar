@@ -12,6 +12,7 @@ function CellObject(name, velocity, size, position, player) {
 	this.name = name;
 	this.velocity = velocity;
 	this.player = player;
+	this.combineDelay = 100;
 }
 CellObject.prototype = Object.create(BlobObject.prototype);
 CellObject.prototype.constructor = BlobObject;

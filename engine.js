@@ -19,6 +19,36 @@ function World(x, y) {
     this.y_max = y / 2;
     this.y_min = -y / 2;
 
+    function combine(cellA, cellB) {
+        // TODO
+        // notify eater of combine
+    }
+
+    function eatCell(eater, eatee) {
+        if (eatee instanceof CellObject) {
+            for (var i = 0; i < this.players.length; ++i) {
+                var playerElt = this.players[i];
+
+                if (playerElt === eatee) {
+                    this.players = this.players.splice(i, 1);
+                    // notify eatee of eat
+                    // notify eater of eat
+                    break;
+                }
+            }
+        } else {
+            for (var i = 0; i < this.food.length; ++i) {
+                var foodElt = this.food[i];
+
+                if (foodElt === eatee) {
+                    this.food = this.food.splice(i, 1);
+                    // notify eater of eat
+                    break;
+                }
+            }
+        }
+    }
+
     this.getCollisions = function() {
         return getCollisionsFromQuad(x,y, foods, players);
     };
@@ -41,16 +71,36 @@ function World(x, y) {
         var collisionPairs = getCollisions();
         for (var i = 0; i < collisionPairs.length; ++i) {
             var collisionElt = collisionPairs[i];
+            var a = collisionElt.a;
+            var b = collisionElt.b;
+
+            // make sure a is larger than b
+            if (a.size < b.size) {
+                var c = a;
+                a = b;
+                b = c;
+            }
+
+            if (a instanceof CellObject) {
+                if (b instanceof CellObject && a.player === b.player) {
+                    if (eatee.combineDelay === 0 && eater.combineDelay === 0) {
+                        combine(eater, eatee);
+                    }
+                }
+                if (a.size >= 1.5 * b.size) {
+                    eatCell(b, a);
+                }
+            }
         }
     }
 }
 
 function getCollisionsFromQuad(x, y, foods, players)
-{   
-    // This will initialize a quadtree with a x*y resolution, 
-    // with an object limit of 3 inside a quadrant. 
+{
+    // This will initialize a quadtree with a x*y resolution,
+    // with an object limit of 3 inside a quadrant.
     var quadtree = new Quadtree2(new Vec2(x, y), 3);
-    
+
     var itemstoadd = new Array();
     for(entity in foods)
     {
@@ -60,8 +110,8 @@ function getCollisionsFromQuad(x, y, foods, players)
                 rad_: entity.size*entity.size
             });
     }
-   
-    // Add all of our beloved character to the quadtree. 
+
+    // Add all of our beloved character to the quadtree.
     quadtree.addObjects(itemstoadd);
     var pairs = new Array();
     for(item in itemstoadd)
@@ -74,7 +124,7 @@ function getCollisionsFromQuad(x, y, foods, players)
 
 module.exports.World = World;
 g_World = new World;
-//create some characters 
+//create some characters
 
 g_World.food.push(new BlobObject(10, new Vector2(500,650)));
 g_World.food.push(new BlobObject(50, new Vector2(500,650)));
@@ -86,16 +136,3 @@ g_World.food.push(new BlobObject(8, new Vector2(450,300)));
 g_World.food.push(new BlobObject(12, new Vector2(345,550)));
 
 console.log(World.getCollisions());
-
-
-
-
-
-
-
-
-
-
-
-
-
