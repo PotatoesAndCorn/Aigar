@@ -11,6 +11,7 @@
 		<script src="math.js" type="text/javascript"></script>
 		<script src="objects.js" type="text/javascript"></script>
 		<script src="tick.js" type="text/javascript"></script>
+		<script src="binary.js"></script>
 
 		<script type="text/javascript">
 			function vector2Tests() {
@@ -61,6 +62,19 @@
 
 			vector2Tests();
 			objectTests();
+
+			var client = new BinaryClient("ws://localhost:9000");
+			client.on('stream', function(stream, meta){
+			    var parts = [];
+			    stream.on('data', function(data){
+			      parts.push(data);
+			    });
+			    stream.on('end', function(){
+			      var img = document.createElement("img");
+			      img.src = (window.URL || window.webkitURL).createObjectURL(new Blob(parts));
+			      document.body.appendChild(img);
+			    });
+			});
 		</script>
 	</head>
 	<body>
