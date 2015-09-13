@@ -63,17 +63,9 @@
 			vector2Tests();
 			objectTests();
 
-			var client = new BinaryClient("ws://localhost:9000");
-			client.on('stream', function(stream, meta){
-			    var parts = [];
-			    stream.on('data', function(data){
-			      parts.push(data);
-			    });
-			    stream.on('end', function(){
-			      var img = document.createElement("img");
-			      img.src = (window.URL || window.webkitURL).createObjectURL(new Blob(parts));
-			      document.body.appendChild(img);
-			    });
+			var client = new BinaryClient("ws://localhost:9845");
+			client.on("open", function() {
+				client.send({ name: "Foo" }, { type: 1 });
 			});
 		</script>
 	</head>
