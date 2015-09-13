@@ -69,30 +69,29 @@ World.prototype.updatePositions = function() {
 }
 
 World.prototype.tick = function() {
-        this.updatePositions();
-        var collisionPairs = getCollisions();
+    this.updatePositions();
+    var collisionPairs = getCollisions();
 
-        for (var i = 0; i < collisionPairs.length; ++i) {
-            var collisionElt = collisionPairs[i];
-            var a = collisionElt.a;
-            var b = collisionElt.b;
+    for (var i = 0; i < collisionPairs.length; ++i) {
+        var collisionElt = collisionPairs[i];
+        var a = collisionElt.a;
+        var b = collisionElt.b;
 
-            // make sure a is larger than b
-            if (a.size < b.size) {
-                var c = a;
-                a = b;
-                b = c;
+        // make sure a is larger than b
+        if (a.size < b.size) {
+            var c = a;
+            a = b;
+            b = c;
+        }
+
+        if (a instanceof CellObject) {
+            if (b instanceof CellObject && a.player === b.player) {
+                if (eatee.combineDelay === 0 && eater.combineDelay === 0) {
+                    combine(eater, eatee);
+                }
             }
-
-            if (a instanceof CellObject) {
-                if (b instanceof CellObject && a.player === b.player) {
-                    if (eatee.combineDelay === 0 && eater.combineDelay === 0) {
-                        combine(eater, eatee);
-                    }
-                }
-                if (a.size >= 1.5 * b.size) {
-                    eatCell(b, a);
-                }
+            if (a.size >= 1.5 * b.size) {
+                eatCell(b, a);
             }
         }
     }
