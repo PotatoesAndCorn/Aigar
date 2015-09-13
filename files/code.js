@@ -7,7 +7,7 @@ var locations = [
     { x: 5, y: 191, size: 60 },
 ];
 
-var codeOpen = false;
+var editor;
 
 var container, $container;
 
@@ -77,7 +77,7 @@ function init() {
     window.addEventListener('resize', onWindowResize, false);
 
     // editor
-    var editor = ace.edit("editor");
+    editor = ace.edit("editor");
     editor.setTheme("ace/theme/monokai");
     editor.getSession().setMode("ace/mode/javascript");
 }
@@ -119,4 +119,8 @@ function writeCode() {
     setTimeout(function() {
         onWindowResize();
     }, 400);
+}
+
+function submitClicked() {
+    eval(editor.getValue());
 }
