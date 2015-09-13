@@ -22,12 +22,12 @@ function World(x, y) {
     this.y_min = -y / 2;
 }
 
-World.prototype.combine(cellA, cellB) {
+World.prototype.combine = function(cellA, cellB) {
     // TODO
     // notify eater of combine
 }
 
-World.prototype.eatCell(eater, eatee) {
+World.prototype.eatCell = function(eater, eatee) {
     if (eatee instanceof CellObject) {
         for (var i = 0; i < this.players.length; ++i) {
             var playerElt = this.players[i];
