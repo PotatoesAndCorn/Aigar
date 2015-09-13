@@ -7,7 +7,9 @@ var locations = [
     { x: 5, y: 191, size: 60 },
 ];
 
-var container;
+var codeOpen = false;
+
+var container, $container;
 
 var camera, scene, renderer, objects;
 var particleLight;
@@ -15,10 +17,15 @@ var particleLight;
 var materials = [];
 
 function init() {
-    container = document.createElement('div');
-    document.body.appendChild(container);
+    container = document.getElementById("canvas");
+    $container = $(container);
 
-    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
+    $container.innerHeight(window.innerHeight);
+    $('#code').innerHeight(window.innerHeight);
+    $('#editor').innerHeight(window.innerHeight - 50 - 150);
+    $('#editor').innerWidth($('#code').innerWidth());
+
+    camera = new THREE.PerspectiveCamera(45, $container.innerWidth() / $container.innerHeight(), 1, 2000);
     camera.position.set(0, 200, 800);
 
     scene = new THREE.Scene();
@@ -62,19 +69,27 @@ function init() {
 
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize($container.innerWidth(), $container.innerHeight());
     container.appendChild(renderer.domElement);
 
     //
 
     window.addEventListener('resize', onWindowResize, false);
+
+    // editor
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.getSession().setMode("ace/mode/javascript");
 }
 
 function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
+    $container.innerHeight(window.innerHeight);
+    $('#code').innerHeight(window.innerHeight);
+
+    camera.aspect = $container.innerWidth() / $container.innerHeight();
     camera.updateProjectionMatrix();
 
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize($container.innerWidth(), $container.innerHeight());
 }
 
 function animate() {
@@ -92,4 +107,16 @@ function render() {
     camera.lookAt(scene.position);
 
     renderer.render(scene, camera);
+}
+
+function writeCode() {
+    if ($container.hasClass('col-lg-12')) {
+        $container.switchClass('col-lg-12', 'col-lg-8');
+    } else {
+        $container.switchClass('col-lg-8', 'col-lg-12');
+    }
+
+    setTimeout(function() {
+        onWindowResize();
+    }, 400);
 }

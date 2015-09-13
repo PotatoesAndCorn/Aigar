@@ -11,12 +11,8 @@ app.get('/:name', function(req, res) {
     res.sendFile(req.params.name, { root: __dirname + '/files/' });
 });
 
-app.get('/resources/:name', function(req, res) {
-    res.sendFile(req.params.name, { root: __dirname + '/files/resources' });
-});
-
-app.get('/resources/css/ui-lightness/:name', function(req, res) {
-    res.sendFile(req.params.name, { root: __dirname + '/files/resources/css/ui-lightness' });
+app.get('/ace-builds/src-min/:name', function(req, res) {
+    res.sendFile(req.params.name, { root: __dirname + '/files/ace-builds-master/src-min/' });
 });
 
 app.enable('trust proxy');

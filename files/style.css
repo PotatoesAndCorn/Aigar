@@ -1,0 +1,14 @@
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: black !important;
+}
+
+.navbar,
+.col-lg-4,
+.col-lg-8,
+.col-lg-12 {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+}
